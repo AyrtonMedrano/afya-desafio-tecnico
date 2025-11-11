@@ -1,5 +1,11 @@
 # React + TypeScript + Vite
 
+Estrutura de desenvolvimento do projeto:
+
+Iniciando com TDD, criando stores e testes para as mesmas.
+
+Seguindo com BDD, criando testes para as funcionalidades da UI com base em comportamento esperado.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
