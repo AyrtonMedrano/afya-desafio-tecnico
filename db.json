@@ -1,0 +1,39 @@
+{
+  "plans": [
+    {
+      "id": 33,
+      "storeId": "pagamento_anual_a_vista",
+      "title": "Anual",
+      "description": "Pagamento à vista ou R$ 700,00 até 12x",
+      "fullPrice": 700,
+      "discountAmmount": 70,
+      "discountPercentage": 10,
+      "periodLabel": "ano",
+      "period": "annually",
+      "discountCouponCode": null,
+      "order": 1,
+      "installments": 12,
+      "acceptsCoupon": true
+    },
+    {
+      "id": 32,
+      "storeId": "pagamento_mensal",
+      "title": "Mensal",
+      "description": "Fica apenas R$ 2 por dia",
+      "fullPrice": 60,
+      "discountAmmount": null,
+      "discountPercentage": null,
+      "periodLabel": "mês",
+      "period": "monthly",
+      "discountCouponCode": null,
+      "order": 2,
+      "installments": 1,
+      "acceptsCoupon": false
+    }
+  ],
+  "coupons": [
+    { "id": 1, "code": "AFYAWB001", "discount": 10 },
+    { "id": 2, "code": "AFYAWB002", "discount": 10 }
+  ],
+  "subscriptions": []
+}

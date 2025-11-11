@@ -9,3 +9,11 @@ describe('App (smoke)', () => {
     expect(heading).toBeInTheDocument()
   })
 })
+
+describe('App (smokeParagraph)', () => {
+  it('deve renderizar o parágrafo de descrição', () => {
+    render(<App />)
+    const paragraph = screen.getByText(/Teste do tailwind./i)
+    expect(paragraph).toBeInTheDocument()
+  })
+})
