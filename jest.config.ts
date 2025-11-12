@@ -24,6 +24,7 @@ const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/test/jest-setup.ts'],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleNameMapper: {
+    'styled-components': '<rootDir>/test/__mocks__/styled-components.js',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '\\.(svg|png|jpg|jpeg|gif)$': '<rootDir>/test/__mocks__/fileMock.js',
   },
