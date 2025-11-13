@@ -2,13 +2,25 @@ import { create } from 'zustand'
 
 type Plano = 'mensal' | 'anual'
 
+interface PaymentData {
+  cardNumber: string
+  nameOnCard: string
+  expiry: string
+  cvv: string
+  cpf: string
+}
+
 interface CheckoutState {
   selectedPlan: Plano
   prices: { mensal: number; anual: number }
   installments: number
+  payment: PaymentData
   selectPlan: (plan: Plano) => void
   setInstallments: (n: number) => void
   setPrices: (prices: { mensal: number; anual: number }) => void
+  updatePayment: (patch: Partial<PaymentData>) => void
+  calculateSubtotal: () => number
+  calculateDiscount: () => number
   calculateTotal: () => number
 }
 
@@ -16,6 +28,13 @@ export const useCheckoutStore = create<CheckoutState>((set, get) => ({
   selectedPlan: 'mensal',
   prices: { mensal: 0, anual: 0 },
   installments: 1,
+  payment: {
+    cardNumber: '',
+    nameOnCard: '',
+    expiry: '',
+    cvv: '',
+    cpf: '',
+  },
 
   selectPlan: (plan) =>
     set((state: CheckoutState) => ({
@@ -25,26 +44,35 @@ export const useCheckoutStore = create<CheckoutState>((set, get) => ({
 
   setInstallments: (n) => set({ installments: n }),
   setPrices: (prices) => set({ prices }),
+  updatePayment: (patch) =>
+    set((state) => ({ payment: { ...state.payment, ...patch } })),
 
-//  LEMBRAR- Implementar lógica
+  // Subtotal sem considerar desconto
+  calculateSubtotal: () => {
+    const { selectedPlan, prices } = get()
+    return Math.round(
+      (selectedPlan === 'mensal' ? prices.mensal : prices.anual) * 100
+    ) / 100
+  },
 
-//  Checklist deos calculos
-// - Mensal: retorna prices.mensal .
-// - Anual 1x: aplica 10% de desconto ( prices.anual * 0.9 ).
-// - Anual com 2x ou mais: retorna prices.anual .
-// - Arredonda para 2 casas decimais para evitar imprecisão.
+  // Desconto apenas para anual 1x (10%)
+  calculateDiscount: () => {
+    const { selectedPlan, prices, installments } = get()
+    if (selectedPlan === 'anual' && installments === 1) {
+      return Math.round(prices.anual * 0.1 * 100) / 100
+    }
+    return 0
+  },
 
+  // Total com regras existentes
   calculateTotal: () => {
     const { selectedPlan, prices, installments } = get()
-    // Mensal: retorna prices.mensal 
     if (selectedPlan === 'mensal') {
       return Math.round(prices.mensal * 100) / 100
     }
-   //Desconto de 10% para anual a vista
     if (installments === 1) {
       return Math.round(prices.anual * 0.9 * 100) / 100
     }
-    // Sem desconto para anual com 2x ou mais
     return Math.round(prices.anual * 100) / 100
   },
 }))

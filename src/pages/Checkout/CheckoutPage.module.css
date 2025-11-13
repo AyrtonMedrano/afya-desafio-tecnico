@@ -14,7 +14,7 @@
 .checkout__header-inner {
   margin: 20px auto;
   max-width: 1366px;
-  padding: 12px 60px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,7 +63,7 @@
   flex-direction: column;
   gap:20px;
   min-width: 0;
-  padding: 0 60px;
+  padding: 0 20px;
   h2{
     font-weight: 700;
     font-size: 20px;
@@ -76,13 +76,11 @@
   display: flex;
   flex-direction: column;
   gap:20px;
-  min-width: 0;
-  padding: 0 60px;
+  padding: 0 20px;
   h2{
     font-weight: 700;
     font-size: 20px;
         margin:0 0 20px 0;
-
   }
 }
 
