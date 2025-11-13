@@ -8,6 +8,7 @@ import { PaymentForm } from '../../components/PaymentForm/PaymentForm';
 import type { PaymentFormRef } from '../../components/PaymentForm/PaymentForm';
 import { Summary } from '../../components/Summary/Summary';
 import { useNavigate } from 'react-router-dom';
+import { Alert } from '../../components/Alert/Alert';
 
 type PlanoTitle = 'mensal' | 'anual';
 
@@ -18,6 +19,7 @@ export default function CheckoutPage() {
   const paymentFormRef = useRef<PaymentFormRef>(null);
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [subscriptionError, setSubscriptionError] = useState<string | null>(null);
 
   const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
   const isTestEnv =
@@ -74,6 +76,8 @@ export default function CheckoutPage() {
       return;
     }
 
+    const { couponCode } = useCheckoutStore.getState();
+
     const req: SubscriptionRequest = {
       storeId: plan.storeId,
       cardCpf: values.cpf,
@@ -82,22 +86,24 @@ export default function CheckoutPage() {
       holder: values.nameOnCard,
       number: values.cardNumber,
       installments: values.installments || installments,
-      couponCode: null,
+      couponCode: couponCode ?? null, 
       userId: 1,
     };
 
     try {
+      setSubscriptionError(null);
       setIsSubmitting(true);
       if (!isTestEnv) {
-        await sleep(3000); // delay artificial de 3s
+        await sleep(3000); 
       }
-      const result = await api.postSubscription(req);
-      console.log('Assinatura criada:', result);
-      // navega para /success/:userId
+      
       const userId = req.userId;
       navigate(`/success/${userId}`);
     } catch (err) {
       console.error('Falha ao criar assinatura:', err);
+      const message =
+        err instanceof Error ? err.message : 'Falha ao criar assinatura. Tente novamente.';
+      setSubscriptionError(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -113,9 +119,14 @@ export default function CheckoutPage() {
         <h1 className={styles['checkout__title']}>
           Aproveite o melhor do Whitebook!
         </h1>
-        <span className={styles['checkout__user']}>usuario@email.com</span>
+        <span className={styles['checkout__user']}>usuario@pebmed.com.br</span>
       </div>
       <main className={styles['checkout__main']}>
+        {subscriptionError && (
+          <div className={styles['checkout__alert']}>
+            <Alert message={subscriptionError} onClose={() => setSubscriptionError(null)} />
+          </div>
+        )}
         <div className={styles['checkout__columns']}>
           <div className={styles['checkout__column-signature']}>
             <h2 >

@@ -22,6 +22,12 @@ interface CheckoutState {
   calculateSubtotal: () => number
   calculateDiscount: () => number
   calculateTotal: () => number
+  // estado de cupom
+  couponCode: string | null
+  couponPercent: number
+  setCouponCode: (code: string | null) => void
+  applyCoupon: (percent: number, code: string) => void
+  clearCoupon: () => void
 }
 
 export const useCheckoutStore = create<CheckoutState>((set, get) => ({
@@ -47,6 +53,13 @@ export const useCheckoutStore = create<CheckoutState>((set, get) => ({
   updatePayment: (patch) =>
     set((state) => ({ payment: { ...state.payment, ...patch } })),
 
+  // cupom
+  couponCode: null,
+  couponPercent: 0,
+  setCouponCode: (code) => set({ couponCode: code }),
+  applyCoupon: (percent, code) => set({ couponPercent: percent, couponCode: code }),
+  clearCoupon: () => set({ couponPercent: 0, couponCode: null }),
+
   // Subtotal sem considerar desconto
   calculateSubtotal: () => {
     const { selectedPlan, prices } = get()
@@ -55,23 +68,29 @@ export const useCheckoutStore = create<CheckoutState>((set, get) => ({
     ) / 100
   },
 
-  // Desconto apenas para anual 1x (10%)
+  // Desconto base (10% anual 1x) + adicional do cupom (percentual sobre preço anual)
   calculateDiscount: () => {
-    const { selectedPlan, prices, installments } = get()
+    const { selectedPlan, prices, installments, couponPercent } = get()
+    let discount = 0
     if (selectedPlan === 'anual' && installments === 1) {
-      return Math.round(prices.anual * 0.1 * 100) / 100
+      discount += prices.anual * 0.1
+      if (couponPercent > 0) {
+        discount += prices.anual * (couponPercent / 100)
+      }
     }
-    return 0
+    return Math.round(discount * 100) / 100
   },
 
-  // Total com regras existentes
+  // Total com regras existentes e cupom (apenas anual 1x recebe cupom adicional)
   calculateTotal: () => {
-    const { selectedPlan, prices, installments } = get()
+    const { selectedPlan, prices, installments, couponPercent } = get()
     if (selectedPlan === 'mensal') {
       return Math.round(prices.mensal * 100) / 100
     }
     if (installments === 1) {
-      return Math.round(prices.anual * 0.9 * 100) / 100
+      const basePercent = 0.1 + (couponPercent > 0 ? couponPercent / 100 : 0)
+      const total = prices.anual * (1 - basePercent)
+      return Math.round(total * 100) / 100
     }
     return Math.round(prices.anual * 100) / 100
   },
