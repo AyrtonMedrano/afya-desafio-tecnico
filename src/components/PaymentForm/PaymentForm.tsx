@@ -7,12 +7,15 @@ import { useCheckoutStore } from '../../store/useCheckoutStore';
 // paymentSchema
 import { formatCardNumber, normalizeCardDigits, luhnCheck, detectCardBrand } from '../../utils/formatCardNumber';
 import { formatExpiry, isExpiryFuture, formatCpf } from '../../utils/formatCardNumber';
-import { IoIosArrowForward } from "react-icons/io";
-import { FaCcMastercard } from "react-icons/fa6";
+import { InstallmentsDrawer } from '../Drawer/InstallmentsDrawer';
+import mastercard from '../../assets/mastercard.svg';
+import diners from '../../assets/dinnersclub.svg';
+import amex from '../../assets/americanexpress.svg';
+import visa from '../../assets/visa.svg';
+import elo from '../../assets/elo.svg';
+import chevronsRight from '../../assets/chevrons-right.svg';
 
 
-
-// paymentSchema
 const paymentSchema = z.object({
     cardNumber: z
         .string()
@@ -57,12 +60,14 @@ export type PaymentFormRef = {
 };
 
 export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function PaymentForm(
-    {  onSubmit, onOpenInstallments },
+    { onSubmit, onOpenInstallments },
     ref
 ) {
     const [brand, setBrand] = useState<'visa' | 'mastercard' | 'amex' | 'diners' | 'elo' | 'unknown'>('unknown');
+    const iconByBrand = { mastercard, diners, amex, visa, elo } as const;
     const { selectedPlan, setInstallments: setStoreInstallments, updatePayment } = useCheckoutStore();
     const [showInstallments, setShowInstallments] = useState(true);
+    const [installmentsOpen, setInstallmentsOpen] = useState(false);
 
     // Apenas mostra parcelas quando for anual
     const shouldShowInstallments = showInstallments && selectedPlan === 'anual';
@@ -119,7 +124,13 @@ export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function
     }));
 
     const handleOpenInstallmentsClick = () => {
-        (onOpenInstallments ?? (() => console.log('Abrir seleção de parcelas')))();
+        setInstallmentsOpen(true);
+        onOpenInstallments?.();
+    };
+
+    const handleConfirmInstallments = (n: number) => {
+        setValue('installments', String(n), { shouldValidate: true, shouldDirty: true });
+        setInstallmentsOpen(false);
     };
 
     useEffect(() => {
@@ -131,63 +142,78 @@ export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function
         }
     }, [selectedPlan, setValue]);
 
+    // Valor atual das parcelas para exibir no trigger
+    const selectedInstallments = watch('installments');
+
     return (
         <section className={styles['payment-form']}>
             <form className={styles['payment-form__box']} onSubmit={handleSubmit(submitHandler)} noValidate>
+                {/* registro sempre presente para installments */}
+                <input type="hidden" {...register('installments')} />
                 <div className={styles['payment-form__brands']}>
                     <span className={styles['payment-form__brands-label']}>Bandeiras aceitas</span>
                     <div className={styles['payment-form__brands-icons']}>
                         {/* Espaços para ícones de bandeiras */}
                         <span
-                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'mastercard' ? styles['payment-form__brand-placeholder--active'] : ''
-                                }`}
+                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'mastercard' ? styles['payment-form__brand-placeholder--active'] : ''}`}
                             aria-label="Mastercard"
                         >
-                        <FaCcMastercard />
+                            <img src={mastercard} alt="" aria-hidden />
                         </span>
 
                         <span
-                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'diners' ? styles['payment-form__brand-placeholder--active'] : ''
-                                }`}
+                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'diners' ? styles['payment-form__brand-placeholder--active'] : ''}`}
                             aria-label="Diners"
-                        />
+                        >
+                            <img src={diners} alt="" aria-hidden />
+                        </span>
+
                         <span
-                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'amex' ? styles['payment-form__brand-placeholder--active'] : ''
-                                }`}
+                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'amex' ? styles['payment-form__brand-placeholder--active'] : ''}`}
                             aria-label="Amex"
-                        />
+                        >
+                            <img src={amex} alt="" aria-hidden />
+                        </span>
+
                         <span
-                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'visa' ? styles['payment-form__brand-placeholder--active'] : ''
-                                }`}
+                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'visa' ? styles['payment-form__brand-placeholder--active'] : ''}`}
                             aria-label="Visa"
                         >
-
+                            <img src={visa} alt="" aria-hidden />
                         </span>
+
                         <span
-                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'elo' ? styles['payment-form__brand-placeholder--active'] : ''
-                                }`}
+                            className={`${styles['payment-form__brand-placeholder']} ${brand === 'elo' ? styles['payment-form__brand-placeholder--active'] : ''}`}
                             aria-label="Elo"
-                        />
+                        >
+                            <img src={elo} alt="" aria-hidden />
+                        </span>
                     </div>
                 </div>
 
                 <label className={styles['payment-form__field']}>
                     <span className={styles['payment-form__label']}>Número do cartão</span>
-                    <input
-                        type="text"
-                        placeholder="0000 0000 0000 0000"
-                        className={`${styles['payment-form__input']} ${errors.cardNumber ? styles['payment-form__input--error'] : ''
-                            }`}
-                        {...register('cardNumber', {
-                            onChange: (e) => {
-                                const value = (e.target as HTMLInputElement).value;
-                                const { formatted, digits } = formatCardNumber(value);
-                                setValue('cardNumber', formatted, { shouldValidate: true, shouldDirty: true });
-                                setBrand(detectCardBrand(digits));
-                            },
-                        })}
-                        aria-invalid={!!errors.cardNumber}
-                    />
+                    <div className={styles['payment-form__input-with-icon']}>
+                        <input
+                            type="text"
+                            placeholder="0000 0000 0000 0000"
+                            className={`${styles['payment-form__input']} ${errors.cardNumber ? styles['payment-form__input--error'] : ''}`}
+                            {...register('cardNumber', {
+                                onChange: (e) => {
+                                    const value = (e.target as HTMLInputElement).value;
+                                    const { formatted, digits } = formatCardNumber(value);
+                                    setValue('cardNumber', formatted, { shouldValidate: true, shouldDirty: true });
+                                    setBrand(detectCardBrand(digits));
+                                },
+                            })}
+                            aria-invalid={!!errors.cardNumber}
+                        />
+                        {brand !== 'unknown' && (
+                            <span className={styles['payment-form__helper-icon']} aria-hidden>
+                                <img src={iconByBrand[brand]} alt="" />
+                            </span>
+                        )}
+                    </div>
                     <span className={styles['payment-form__error']}>Campo obrigatório</span>
                 </label>
 
@@ -252,7 +278,7 @@ export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function
                                     },
                                 })} aria-invalid={!!errors.cvv}
                             />
-                            <span className={styles['payment-form__helper-icon']} />
+                            {/* <span className={styles['payment-form__helper-icon']} /> */}
                         </div>
                         <span className={styles['payment-form__error']}>Campo obrigatório</span>
                     </label>
@@ -280,32 +306,45 @@ export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function
                     <span className={styles['payment-form__error']}>Campo obrigatório</span>
                 </label>
 
-                {showInstallments && (
+                {shouldShowInstallments && (
                     <label className={styles['payment-form__field']}>
                         <span className={styles['payment-form__label']}>Número de parcelas</span>
-                        <input type="hidden" {...register('installments')} />
                         <div className={styles['payment-form__select-wrapper']}>
                             <button
                                 type="button"
                                 onClick={handleOpenInstallmentsClick}
-                                className={`${styles['payment-form__select-trigger']} ${errors.installments ? styles['payment-form__select-trigger--error'] : ''
-                                    }`}
+                                className={`${styles['payment-form__select-trigger']} ${errors.installments ? styles['payment-form__select-trigger--error'] : ''}`}
                                 aria-invalid={!!errors.installments}
                             >
-                                <span className={styles['payment-form__select-trigger-placeholder']}>
-                                    Selecione o número de parcelas
+                                {selectedInstallments ? (
+                                    <span className={styles['payment-form__select-trigger-value']}>
+                                        {Number(selectedInstallments)}x
+                                    </span>
+                                ) : (
+                                    <span className={styles['payment-form__select-trigger-placeholder']}>
+                                        Selecione o número de parcelas
+                                    </span>
+                                )}
+                                <span className={styles['payment-form__select-arrow']} aria-hidden>
+                                    <img src={chevronsRight} alt="Seta para direita" />
                                 </span>
-
-                                <IoIosArrowForward className={styles['payment-form__select-arrow']} />
-
                             </button>
                         </div>
-                        <span className={styles['payment-form__error']}>Campo obrigatório</span>
+                        <span className={styles['payment-form__error']}>
+                            {errors.installments?.message ?? ' '}
+                        </span>
                     </label>
                 )}
 
                 
             </form>
+
+            {/* Drawer de Parcelas */}
+            <InstallmentsDrawer
+                isOpen={installmentsOpen}
+                onClose={() => setInstallmentsOpen(false)}
+                onConfirm={handleConfirmInstallments}
+            />
         </section>
     );
     

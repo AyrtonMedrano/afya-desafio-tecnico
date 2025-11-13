@@ -32,8 +32,29 @@
     }
   ],
   "coupons": [
-    { "id": 1, "code": "AFYAWB001", "discount": 10 },
-    { "id": 2, "code": "AFYAWB002", "discount": 10 }
+    {
+      "id": 1,
+      "code": "AFYAWB001",
+      "discount": 10
+    },
+    {
+      "id": 2,
+      "code": "AFYAWB002",
+      "discount": 10
+    }
   ],
-  "subscriptions": []
+  "subscriptions": [
+    {
+      "id": 1763045521893,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "4831 5010 0495 1368",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    }
+  ]
 }
