@@ -7,6 +7,7 @@ import styles from './CheckoutPage.module.css';
 import { PaymentForm } from '../../components/PaymentForm/PaymentForm';
 import type { PaymentFormRef } from '../../components/PaymentForm/PaymentForm';
 import { Summary } from '../../components/Summary/Summary';
+import { useNavigate } from 'react-router-dom';
 
 type PlanoTitle = 'mensal' | 'anual';
 
@@ -15,6 +16,13 @@ export default function CheckoutPage() {
     useCheckoutStore();
   const [plans, setPlans] = useState<Plan[]>([]);
   const paymentFormRef = useRef<PaymentFormRef>(null);
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
+  const isTestEnv =
+      (import.meta )?.env?.MODE === 'test' ||
+      process.env.NODE_ENV === 'test';
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -79,11 +87,19 @@ export default function CheckoutPage() {
     };
 
     try {
+      setIsSubmitting(true);
+      if (!isTestEnv) {
+        await sleep(3000); // delay artificial de 3s
+      }
       const result = await api.postSubscription(req);
       console.log('Assinatura criada:', result);
-      // TODO: navegar para sucesso quando pronto
+      // navega para /success/:userId
+      const userId = req.userId;
+      navigate(`/success/${userId}`);
     } catch (err) {
       console.error('Falha ao criar assinatura:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -93,15 +109,12 @@ export default function CheckoutPage() {
 
   return (
     <div className={styles.checkout}>
-      <header className={styles['checkout__header']}>
-        <h1>Afya</h1>
-      </header>
-        <div className={styles['checkout__header-inner']}>
-          <h1 className={styles['checkout__title']}>
-            Aproveite o melhor do Whitebook!
-          </h1>
-          <span className={styles['checkout__user']}>usuario@email.com</span>
-        </div>
+      <div className={styles['checkout__header-inner']}>
+        <h1 className={styles['checkout__title']}>
+          Aproveite o melhor do Whitebook!
+        </h1>
+        <span className={styles['checkout__user']}>usuario@email.com</span>
+      </div>
       <main className={styles['checkout__main']}>
         <div className={styles['checkout__columns']}>
           <div className={styles['checkout__column-signature']}>
@@ -142,13 +155,19 @@ export default function CheckoutPage() {
               onClick={finalizeFromSummary}
               aria-label="Finalizar Compra"
               className={styles['checkout__button-finalize']}
-              
+              disabled={isSubmitting}
             >
-              Finalizar assinatura
+              {isSubmitting ? 'Processando...' : 'Finalizar assinatura'}
             </button>
           </div>
         </div>
       </main>
+
+      {isSubmitting && (
+        <div className={styles['checkout__loading-overlay']} role="status" aria-live="polite" aria-label="Carregando">
+          <div className={styles['checkout__spinner']} />
+        </div>
+      )}
     </div>
   );
 }

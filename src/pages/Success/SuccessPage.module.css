@@ -1,0 +1,270 @@
+.success {
+  padding: 60px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 12px 0 16px;
+}
+
+
+.loading {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+}
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #dddddd;
+  border-top-color: #0b65d9;
+  border-radius: 50%;
+  animation: s_spin 0.8s linear infinite;
+}
+@keyframes s_spin { to { transform: rotate(360deg); } }
+
+
+.card {
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+
+.hero {
+  background: #0b65d9;
+  color: #fff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 12px 12px 0 0;
+
+}
+.heroLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.heroIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+}
+.heroIcon img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.heroTitle {
+  font-weight: 600;
+}
+.heroRight {
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+
+.section {
+  padding: 16px;
+  border-radius: 0 0 12px 12px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #151516;
+  margin-bottom: 12px;
+}
+
+.timeline {
+  position: relative;
+  padding: 30px 20px;
+}
+.timelineTrack {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  top: 42px;                 
+  height: 14px;               
+  border-radius: 8px;
+  background: linear-gradient(90deg, #eaf2ff 0%, #dbe9ff 100%);
+}
+.timelineSteps {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+           
+}
+.step {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 120px;
+}
+.stepLeft { margin-left: 40px; }
+.stepCenter { 
+    margin-left: calc(40px + ((100% - 80px) / 3)); 
+    opacity: 0.2;
+}
+.stepRight { margin-left: calc(40px + (2 * ((100% - 80px) / 3))); }
+.stepIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #0b65d9;      
+  border: none;
+  box-shadow: 0 2px 4px rgba(11, 101, 217, 0.3);
+}
+.stepSecondIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #7EADF2;      
+  border: none;
+  box-shadow: 0 2px 4px rgba(11, 101, 217, 0.3);   
+}
+.stepThirdIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #7EADF2;      
+  border: none;
+  box-shadow: 0 2px 4px rgba(11, 101, 217, 0.3);      
+}
+.stepIcon img {
+  width: 22px;
+  height: 22px;
+  display: block;
+  filter: brightness(0) invert(1); 
+}
+.stepLabel {
+  font-size: 12px;
+  color: #151516;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+.contract {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.contractGrid {
+  display: flex;              
+  gap: 40px;
+  flex-wrap: wrap;            
+  
+}
+
+.contractLeft {
+  display: flex;              
+  flex: 1;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.col {
+  display: flex;              
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+.row {
+  display: flex;              
+  gap: 8px;
+}
+.label {
+  color: #727272;
+  font-size: 12px;
+  flex: 0 0 140px;            
+}
+.value {
+  color: #151516;
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;                   
+}
+.contractRight {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #151516;
+  font-size: 13px;
+  flex: 1;
+}
+.notes {
+  font-size: 12px;
+  color: #727272;
+}
+
+@media (max-width: 992px) {
+  .hero { padding: 14px; }
+  .heroTitle { font-size: 15px; }
+  .heroRight { font-size: 14px; }
+  .timeline { padding: 26px 16px; }
+  .timelineTrack { left: 32px; right: 32px; top: 38px; height: 6px; }
+  .timelineSteps { padding: 0 32px; }
+  .stepIcon { width: 36px; height: 36px; }
+  .stepSecondIcon { width: 36px; height: 36px; }
+  .stepThirdIcon { width: 36px; height: 36px; }
+  .stepIcon img { width: 20px; height: 20px; }
+}
+
+@media (max-width: 768px) {
+  .timeline { padding: 22px 12px; }
+  .timelineTrack { left: 20px; right: 20px; top: 34px; height: 6px; }
+  .timelineSteps { padding: 0 20px; }
+  .stepIcon { width: 32px; height: 32px; }
+  .stepSecondIcon { width: 32px; height: 32px; }
+  .stepThirdIcon { width: 32px; height: 32px; }
+  .stepLabel { font-size: 11px; }
+
+  .contractGrid { flex-direction: column; }
+  .contractLeft { flex-direction: column; gap: 16px; }
+  .label { flex-basis: 120px; } 
+}
+
+@media (max-width: 560px) {
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .heroRight {
+    width: 100%;
+    text-align: left;
+    opacity: 0.9;
+  }
+  .timeline { padding: 18px 10px; }
+  .timelineTrack { left: 16px; right: 16px; top: 30px; height: 5px; }
+  .timelineSteps { padding: 0; }
+  .stepIcon { width: 28px; height: 28px; }
+  .stepSecondIcon { width: 28px; height: 28px; }
+  .stepThirdIcon { width: 28px; height: 28px; }
+  .stepIcon img { width: 18px; height: 18px; }
+  .stepSecondIcon img { width: 18px; height: 18px; }
+  .stepThirdIcon img { width: 18px; height: 18px; }
+  .stepLabel { font-size: 8px; }
+  .row { flex-direction: column; gap: 4px; }
+  .label { flex: none; }
+  .value { flex: none; }
+
+  .card { margin-bottom: 12px; border-radius: 10px; }
+}

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { jest } from '@jest/globals'
 import type { Plan, Subscription } from '../../types/checkout'
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 jest.unstable_mockModule('../../services/api', () => ({
   getPlans: jest.fn(),
@@ -76,7 +77,14 @@ describe('CheckoutPage (fluxo principal - simulaçao de caminho feliz)', () => {
       price: 630,
     } as Subscription)
 
-    render(<CheckoutPage />)
+    render(
+      <MemoryRouter initialEntries={['/checkout']}>
+        <Routes>
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/success" element={<div>Success Route</div>} />
+        </Routes>
+      </MemoryRouter>
+    )
 
     expect(await screen.findByLabelText(/Mensal/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Anual/i)).toBeInTheDocument()

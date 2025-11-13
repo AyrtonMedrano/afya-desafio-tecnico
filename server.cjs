@@ -99,7 +99,8 @@ server.get('/subscriptions/:userId', (req, res) => {
   const userId = Number(req.params.userId)
   const subs = db.get('subscriptions').filter({ userId }).value()
   if (!subs.length) return res.status(404).json({ message: 'Assinatura não encontrada' })
-  return res.json(subs[0])
+  const latest = subs.sort((a, b) => b.id - a.id)[0]
+  return res.json(latest)
 })
 
 // Fallback para recursos padrão (plans, coupons, subscriptions)

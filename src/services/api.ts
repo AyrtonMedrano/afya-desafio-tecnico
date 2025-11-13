@@ -47,7 +47,7 @@ export async function postSubscription(req: SubscriptionRequest): Promise<Subscr
 }
 
 export async function getSubscription(userId: number): Promise<Subscription> {
-  const res = await fetch(`${API_BASE_URL}/subscription/${userId}`)
+  const res = await fetch(`${API_BASE_URL}/subscriptions/${userId}`)
   if (!res.ok) {
     const text = await res.text().catch(() => '')
     throw new Error(`HTTP ${res.status}: ${text}`)

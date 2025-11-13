@@ -55,6 +55,54 @@
       "price": 630,
       "storeId": "pagamento_anual_a_vista",
       "couponCode": null
+    },
+    {
+      "id": 1763047025370,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763047414649,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763047872853,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763048009876,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
     }
   ]
 }
