@@ -1,6 +1,24 @@
 # Whitebook Checkout
 
-Fluxo completo de checkout para assinatura do Whitebook, com foco em arquitetura clara, confiabilidade e excelente UX.
+Desafio técnico para a vaga de Desenvolvedor Frontend - Ayrton Medrano
+
+Caro examinador, busquei ao máximo utilizar as tecnologias citadas no escopo do teste, neste código você irá encontrar testes unitários, de integração e e2e.
+
+Utilizei styled components em componentes modulares e CSS modules nas páginas de layout, busquei utilizar os dois para melhores fins de avaliação.
+
+Espero que gostem, custou uma semana de noites mal dormidas rs.
+
+No mais, qualquer dúvida fico a disposição via celular ou e-mail.
+
+Ayton Medrano
++55 (11)96694-9707
+mrayrtonmedrano@gmail.com
+
+## Deploy
+
+Frontend - https://afya-ayrton-medrano.vercel.app/
+Backend - https://afya-desafio-tecnico.onrender.com
+Monitoramento do backend (Robô) - https://dashboard.uptimerobot.com/monitors
 
 ## Visão Geral
 - Front-end em React + TypeScript (Vite).
@@ -35,6 +53,7 @@ Fluxo completo de checkout para assinatura do Whitebook, com foco em arquitetura
 ## Regras de Negócio
 - Anual 1x recebe 10% de desconto; cupom adicional aplica percentual sobre o preço anual.
 - Ao alterar o plano (mensal/anual), as parcelas resetam para 1x e são refletidas em formulário, resumo e drawer.
+- O plano mensal não possui aplicação para cupom de desconto.
 - `SuccessPage` consulta a assinatura por `userId` e exibe dados contratados.
 
 ## Estilo: CSS Modules + Styled Components
@@ -86,9 +105,6 @@ Preview:
 npm run preview
 ```
 
-## Deploy
-- Preparado para Vercel. Configure `VITE_API_BASE_URL` no ambiente para usar uma API válida.
-- A build usa `tsc -b && vite build` com `strict` e regras de não uso para segurança de produção.
 
 ## Estrutura (resumo)
 - `src/components` — UI: PaymentForm, Summary, Drawer, etc.
@@ -98,8 +114,3 @@ npm run preview
 - `src/types` — tipos TypeScript
 - `server.cjs` — servidor local (json-server custom)
 - `db.json` — dados (plans, coupons, subscriptions)
-
-## Decisões e Próximos Passos
-- `tsconfig` com `strict` e `noUnusedLocals/Parameters` para código limpo e previsível.
-- Utils de formatação isolados para testabilidade.
-- Evolução futura: API real para produção, observabilidade, melhorias de acessibilidade.
