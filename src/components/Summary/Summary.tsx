@@ -126,7 +126,7 @@ export const Summary: React.FC = () => {
                     <Row>
                         <Label>Desconto – 10%</Label>
                         <DiscountValue>
-                            {formatBRL(Math.round(subtotal * 0.1 * 100) / 100)}
+                            – {formatBRL(Math.round(subtotal * 0.1 * 100) / 100)}
                         </DiscountValue>
                     </Row>
                 )}

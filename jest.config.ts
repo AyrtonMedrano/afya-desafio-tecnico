@@ -23,6 +23,7 @@ const config: Config = {
   },
   setupFilesAfterEnv: ['<rootDir>/test/jest-setup.ts'],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  testPathIgnorePatterns: ['<rootDir>/e2e/'],
   moduleNameMapper: {
     'styled-components': '<rootDir>/test/__mocks__/styled-components.js',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',

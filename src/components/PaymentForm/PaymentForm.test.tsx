@@ -1,31 +1,38 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { jest } from '@jest/globals';
+import { act } from 'react';
+import { createRef } from 'react';
+import { useCheckoutStore } from '../../store/useCheckoutStore';
 import { PaymentForm } from './PaymentForm';
+import type { PaymentFormRef } from './PaymentForm';
 
 describe('PaymentForm', () => {
+  beforeEach(() => {
+    useCheckoutStore.setState({ selectedPlan: 'anual' });
+  });
+
   it('renderiza títulos e labels principais', () => {
     render(
       <PaymentForm
-        showInstallments
         onOpenInstallments={() => {}}
         onSubmit={() => {}}
       />
     );
 
-    expect(screen.getByText('Insira os dados de pagamento')).toBeInTheDocument();
     expect(screen.getByText('Bandeiras aceitas')).toBeInTheDocument();
 
-    // Campos principais por placeholders
-    expect(screen.getByPlaceholderText('0000 0000 0000 0000')).toBeInTheDocument(); // Número do cartão
-    expect(screen.getByPlaceholderText('Preencha igual ao cartão')).toBeInTheDocument(); // Nome impresso
-    expect(screen.getByPlaceholderText('MM/AA')).toBeInTheDocument(); // Validade
-    expect(screen.getByPlaceholderText('000')).toBeInTheDocument(); // CVV
-    expect(screen.getByPlaceholderText('000.000.000-00')).toBeInTheDocument(); // CPF
+    expect(screen.getByPlaceholderText('0000 0000 0000 0000')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Preencha igual ao cartão')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('MM/AA')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('000')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('000.000.000-00')).toBeInTheDocument();
 
-    // Trigger de parcelas
     expect(
-      screen.getByRole('button', { name: /Selecione o número de parcelas/i })
+      screen.getByRole('button', { name: /Número de parcelas/i })
     ).toBeInTheDocument();
+
+    expect(screen.getByText('Selecione o número de parcelas')).toBeInTheDocument();
   });
 
   it('chama onOpenInstallments ao clicar no trigger de parcelas', async () => {
@@ -33,81 +40,86 @@ describe('PaymentForm', () => {
 
     render(
       <PaymentForm
-        showInstallments
         onOpenInstallments={onOpenInstallments}
         onSubmit={() => {}}
       />
     );
 
     await userEvent.click(
-      screen.getByRole('button', { name: /Selecione o número de parcelas/i })
+      screen.getByRole('button', { name: /Número de parcelas/i })
     );
 
     expect(onOpenInstallments).toHaveBeenCalledTimes(1);
   });
 
   it('exibe mensagens de erro ao submeter vazio', async () => {
-    render(
+    const { container } = render(
       <PaymentForm
-        showInstallments
         onOpenInstallments={() => {}}
         onSubmit={() => {}}
       />
     );
 
-    await userEvent.click(screen.getByRole('button', { name: /Pagar/i }));
+    const form = container.querySelector('form') as HTMLFormElement;
 
-    // Deve exibir erros em múltiplos campos
-    const errors = await screen.findAllByText('Campo obrigatório');
-    expect(errors.length).toBeGreaterThanOrEqual(5);
-
-    // O trigger de parcelas deve estar inválido
-    const trigger = screen.getByRole('button', {
-      name: /Selecione o número de parcelas/i,
+    await act(async () => {
+      fireEvent.submit(form);
     });
-    expect(trigger).toHaveAttribute('aria-invalid', 'true');
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('0000 0000 0000 0000')).toHaveAttribute('aria-invalid', 'true');
+      expect(screen.getByPlaceholderText('Preencha igual ao cartão')).toHaveAttribute('aria-invalid', 'true');
+      expect(screen.getByPlaceholderText('MM/AA')).toHaveAttribute('aria-invalid', 'true');
+      expect(screen.getByPlaceholderText('000')).toHaveAttribute('aria-invalid', 'true');
+      expect(screen.getByPlaceholderText('000.000.000-00')).toHaveAttribute('aria-invalid', 'true');
+      expect(
+        screen.getByRole('button', { name: /Número de parcelas/i })
+      ).toHaveAttribute('aria-invalid', 'true');
+    });
   });
 
   it('submete com valores válidos e parcelas definidas', async () => {
     const onSubmit = jest.fn();
+    const ref = createRef<PaymentFormRef>();
 
-    const { container } = render(
+    render(
       <PaymentForm
-        showInstallments
+        ref={ref}
         onOpenInstallments={() => {}}
         onSubmit={onSubmit}
       />
     );
 
-    // Preencher campos
     await userEvent.type(
       screen.getByPlaceholderText('0000 0000 0000 0000'),
-      '5555 4444 3333 2222'
+      '4111 1111 1111 1111'
     );
     await userEvent.type(
       screen.getByPlaceholderText('Preencha igual ao cartão'),
       'John Doe'
     );
-    await userEvent.type(screen.getByPlaceholderText('MM/AA'), '10/21');
+    await userEvent.type(screen.getByPlaceholderText('MM/AA'), '12/29');
     await userEvent.type(screen.getByPlaceholderText('000'), '123');
     await userEvent.type(screen.getByPlaceholderText('000.000.000-00'), '98765432100');
 
-    // Atualiza o input hidden de installments, simulando escolha no offCanvas
-    const hiddenInstallments = container.querySelector(
-      'input[type="hidden"][name="installments"]'
-    ) as HTMLInputElement;
-    fireEvent.change(hiddenInstallments, { target: { value: '3' } });
+    await act(async () => {
+      ref.current?.setInstallments(3);
+    });
 
-    // Submeter
-    await userEvent.click(screen.getByRole('button', { name: /Pagar/i }));
+    await act(async () => {
+      ref.current?.submit();
+    });
 
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+    });
+
     expect(onSubmit).toHaveBeenCalledWith({
-      cardNumber: '5555 4444 3333 2222',
+      cardNumber: '4111 1111 1111 1111',
       nameOnCard: 'John Doe',
-      expiry: '10/21',
+      expiry: '12/29',
       cvv: '123',
-      cpf: '98765432100',
+      cpf: '987.654.321-00',
       installments: 3,
     });
   });

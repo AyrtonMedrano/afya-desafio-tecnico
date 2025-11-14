@@ -25,7 +25,7 @@ describe('InstallmentsDrawer', () => {
     render(<InstallmentsDrawer isOpen={true} onClose={() => {}} onConfirm={() => {}} />);
     expect(screen.getByText(/1x de R\$ 630,00/i)).toBeInTheDocument();
     expect(screen.getByText(/10% de desconto/i)).toBeInTheDocument();
-    expect(screen.getByText(/2x de R\$ 315,00/i)).toBeInTheDocument();
+    expect(screen.getByText(/2x de R\$ 350,00/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Total de R\$ 700,00/i).length).toBeGreaterThan(0);
   });
 

@@ -113,7 +113,7 @@
 
 .payment-form__row .payment-form__field {
   flex: 1;
-  min-width: 0; /* permite o wrap do texto dentro da coluna */
+  min-width: 0; 
 }
 
 .payment-form__input-with-icon {

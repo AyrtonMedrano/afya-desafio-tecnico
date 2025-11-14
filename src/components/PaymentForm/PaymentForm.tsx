@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './PaymentForm.module.css';
 import { useCheckoutStore } from '../../store/useCheckoutStore';
-// paymentSchema
 import { formatCardNumber, normalizeCardDigits, luhnCheck, detectCardBrand } from '../../utils/formatCardNumber';
 import { formatExpiry, isExpiryFuture, formatCpf } from '../../utils/formatCardNumber';
 import { InstallmentsDrawer } from '../Drawer/InstallmentsDrawer';
