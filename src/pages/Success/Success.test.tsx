@@ -20,6 +20,7 @@ describe('SuccessPage', () => {
       period: 'annually' as const,
       number: '5555444433332222',
       price: 630,
+      userId: 1
     })
 
     render(

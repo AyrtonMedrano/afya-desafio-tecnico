@@ -37,7 +37,6 @@ export const Summary: React.FC = () => {
         selectedPlan,
         installments,
         calculateSubtotal,
-        // calculateDiscount,
         calculateTotal,
         couponCode,
         couponPercent,
@@ -85,7 +84,6 @@ export const Summary: React.FC = () => {
                 setError('Código de cupom inválido');
                 return;
             }
-            // aplica cupom apenas para anual 1x
             applyCoupon(res.discount, couponInput.trim());
             setCouponCode(couponInput.trim());
             setShowCoupon(false);
@@ -131,14 +129,14 @@ export const Summary: React.FC = () => {
                     </Row>
                 )}
 
-                {!couponApplied && (
+                {selectedPlan === 'anual' && !couponApplied && (
                     <CouponButton type="button" aria-label="Tem um cupom de desconto?" onClick={handleOpenCoupon}>
                         <img src={tag} alt="Icone de uma etiqueta desenhada em cor roxa" />
                         Tem um cupom de desconto?
                     </CouponButton>
                 )}
 
-                {showCoupon && (
+                {selectedPlan === 'anual' && showCoupon && (
                     <CouponBox aria-live="polite">
                         <CouponLabel>Cupom de desconto</CouponLabel>
                         <CouponInput
@@ -165,19 +163,18 @@ export const Summary: React.FC = () => {
                     </CouponBox>
                 )}
 
-                {couponApplied && (
+                {selectedPlan === 'anual' && couponApplied && (
                     <CouponSuccess>
                         <CouponSuccessTop>
                             <strong>Cupom aplicado!</strong>
                             <CouponSuccessRemove
-                            type="button"
-                            onClick={clearCoupon}
-                            aria-label="Remover cupom"
+                              type="button"
+                              onClick={clearCoupon}
+                              aria-label="Remover cupom"
                             >
-                            ✕
-                        </CouponSuccessRemove>
+                              ✕
+                            </CouponSuccessRemove>
                         </CouponSuccessTop>
-                        
                         <span>Desconto de {formatBRL(Math.round(subtotal * (couponPercent / 100) * 100) / 100)}</span>
                     </CouponSuccess>
                 )}

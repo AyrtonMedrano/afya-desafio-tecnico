@@ -37,6 +37,7 @@ export const RadioInput = styled.input`
   right: 1.5rem;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 `;
 
 export const Title = styled.h3`

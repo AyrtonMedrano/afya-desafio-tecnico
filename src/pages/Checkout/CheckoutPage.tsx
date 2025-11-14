@@ -75,6 +75,8 @@ export default function CheckoutPage() {
     }
 
     const { couponCode } = useCheckoutStore.getState();
+    const normalizedCouponCode = (couponCode?.trim() || '').length > 0 ? couponCode!.trim() : null;
+    const requestUserId = Date.now();
 
     const req: SubscriptionRequest = {
       storeId: plan.storeId,
@@ -84,15 +86,18 @@ export default function CheckoutPage() {
       holder: values.nameOnCard,
       number: values.cardNumber,
       installments: values.installments || installments,
-      couponCode: couponCode ?? null,
-      userId: 1,
+      couponCode: selectedPlan === 'anual' ? normalizedCouponCode : null,
+      userId: requestUserId,
     };
 
     try {
       setSubscriptionError(null);
       setIsSubmitting(true);
-      await api.postSubscription(req);
-      navigate(`/success/${req.userId}`);
+      const created = await api.postSubscription(req);
+      const hasUserId = (obj: unknown): obj is { userId: number } =>
+          typeof (obj as { userId?: unknown }).userId === 'number';
+      const targetUserId = hasUserId(created) ? created.userId : requestUserId;
+      navigate(`/success/${targetUserId}`);
     } catch (err) {
       console.error('Falha ao criar assinatura:', err);
       const message =
@@ -104,6 +109,10 @@ export default function CheckoutPage() {
   };
 
   const finalizeFromSummary = () => {
+    const values = paymentFormRef.current?.getValues();
+    if (selectedPlan === 'anual' && (!values?.installments || values.installments.trim() === '')) {
+      paymentFormRef.current?.setInstallments(1);
+    }
     paymentFormRef.current?.submit();
   };
 

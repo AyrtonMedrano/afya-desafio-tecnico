@@ -33,6 +33,8 @@ export function Drawer({
   role = 'dialog',
   children,
 }: PropsWithChildren<DrawerProps>) {
+  if (!isOpen) return null;
+
   return (
     <>
       <Overlay $visible={isOpen} onClick={onClose} aria-hidden={!isOpen} />
@@ -52,7 +54,6 @@ export function Drawer({
         <Content>{children}</Content>
 
         <Footer>
-          
           <PrimaryButton
             type="button"
             onClick={onConfirm}

@@ -1,6 +1,10 @@
 import type { Plan, Coupon, SubscriptionRequest, Subscription } from '../types/checkout'
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000'
+  (typeof import.meta !== 'undefined' &&
+    import.meta.env &&
+    import.meta.env.VITE_API_BASE_URL)
+    ? import.meta.env.VITE_API_BASE_URL
+    : 'http://localhost:3000'
 
 export async function getPlans(): Promise<Plan[]> {
   const res = await fetch(`${API_BASE_URL}/plans`)

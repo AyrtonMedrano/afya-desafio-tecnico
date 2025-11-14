@@ -44,6 +44,185 @@
     }
   ],
   "subscriptions": [
-    
+    {
+      "id": 1763045521893,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "4831 5010 0495 1368",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763047025370,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763047414649,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763047872853,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763048009876,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5162 9241 7030 5225",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": null
+    },
+    {
+      "id": 1763128772167,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5149 2513 7600 5534",
+      "price": 567,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": "AFYAWB002"
+    },
+    {
+      "id": 1763129639829,
+      "userId": 1,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "2289 0028 8791 2301 285",
+      "price": 567,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": "AFYAWB001"
+    },
+    {
+      "id": 1763131943521,
+      "userId": 1763131943495,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "monthly",
+      "number": "3410 2991 2134 167",
+      "price": 60,
+      "storeId": "pagamento_mensal",
+      "couponCode": null
+    },
+    {
+      "id": 1763132217483,
+      "userId": 1763132217436,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "monthly",
+      "number": "5101 0674 1207 0795",
+      "price": 60,
+      "storeId": "pagamento_mensal",
+      "couponCode": null
+    },
+    {
+      "id": 1763132286720,
+      "userId": 1763132286701,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "monthly",
+      "number": "5101 0674 1207 0795",
+      "price": 60,
+      "storeId": "pagamento_mensal",
+      "couponCode": null
+    },
+    {
+      "id": 1763132364664,
+      "userId": 1763132364634,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "monthly",
+      "number": "5101 0674 1207 0795",
+      "price": 60,
+      "storeId": "pagamento_mensal",
+      "couponCode": null
+    },
+    {
+      "id": 1763132469592,
+      "userId": 1763132469589,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "monthly",
+      "number": "5101 0674 1207 0795",
+      "price": 60,
+      "storeId": "pagamento_mensal",
+      "couponCode": null
+    },
+    {
+      "id": 1763132787739,
+      "userId": 1763132787716,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "monthly",
+      "number": "5101 0674 1207 0795",
+      "price": 60,
+      "storeId": "pagamento_mensal",
+      "couponCode": null
+    },
+    {
+      "id": 1763133048340,
+      "userId": 1763133048329,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 1,
+      "period": "annually",
+      "number": "5101 0674 1207 0795",
+      "price": 567,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": "AFYAWB001"
+    },
+    {
+      "id": 1763134126223,
+      "userId": 1763134126216,
+      "cardCpf": "228.900.288-79",
+      "method": "credit_card",
+      "installments": 10,
+      "period": "annually",
+      "number": "5101 0674 1207 0795",
+      "price": 630,
+      "storeId": "pagamento_anual_a_vista",
+      "couponCode": "AFYAWB001"
+    }
   ]
 }

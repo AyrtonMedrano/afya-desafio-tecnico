@@ -87,7 +87,6 @@ export default function SuccessPage() {
 
                     <section className={`${styles.card} ${styles.contract}`}>
                         <div className={styles.sectionTitle}>Dados da contratação</div>
-
                         <div className={styles.contractGrid}>
                             <div className={styles.contractLeft}>
                                 <div className={styles.col}>
@@ -115,7 +114,7 @@ export default function SuccessPage() {
                                     <div className={styles.row}>
                                         <span className={styles.label}>Parcelamento</span>
                                         <span className={styles.value}>
-                                            {sub.installments}x de {currency(sub.price)}
+                                            {sub.installments}x de {currency(Math.round((sub.price / sub.installments) * 100) / 100)}
                                         </span>
                                     </div>
                                     <div className={styles.row}>

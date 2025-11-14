@@ -41,4 +41,5 @@ export interface Subscription {
   period: Period
   number: string
   price: number
+  userId: number
 }

@@ -133,13 +133,12 @@ export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function
     };
 
     useEffect(() => {
-        if(selectedPlan==='mensal'){
+        if (selectedPlan === 'mensal') {
             setShowInstallments(false);
             setValue('installments', '1', { shouldValidate: true, shouldDirty: true });
-        }
-        if(selectedPlan==='anual'){
+        } else if (selectedPlan === 'anual') {
             setShowInstallments(true);
-            setValue('installments', '1', { shouldValidate: true, shouldDirty: true });
+            setValue('installments', '', { shouldValidate: true, shouldDirty: true });
         }
     }, [selectedPlan, setValue]);
 

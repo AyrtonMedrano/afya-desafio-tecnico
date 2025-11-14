@@ -17,10 +17,6 @@ const findCouponByCode = (db, code) => {
   return coupons.find((c) => c.code === code)
 }
 
-//ENDPOINTS ->
-
-// POST - /coupon/validate — Este endpoint valida um cupom se existente
-
 server.post('/coupon/validate', (req, res) => {
   const { code } = req.body || {}
   const db = router.db
@@ -30,8 +26,6 @@ server.post('/coupon/validate', (req, res) => {
 
   return res.json({ valid: true, discount: coupon.discount })
 })
-
-// POST /subscription — Este enpoint calcula o preço e processa a compra
 
 server.post('/subscription', (req, res) => {
   const db = router.db
@@ -56,28 +50,26 @@ server.post('/subscription', (req, res) => {
   const plan = findPlanByStoreId(db, storeId)
   if (!plan) return res.status(404).json({ message: 'Plano não encontrado!' })
 
-  // Preço base conforme plano e parcelas
   let price = plan.fullPrice
   const period = plan.period
 
-  // Desconto de 10% para anual se pago a vista
   if (plan.period === 'annually' && installments === 1) {
     price = Math.round(price * 0.9 * 100) / 100
   }
 
-  // Aplicação de cupom: reduz percentual sobre o preço atual
   let appliedCoupon = null
   if (couponCode) {
     const coupon = findCouponByCode(db, couponCode)
-    if (coupon && plan.acceptsCoupon) {
+    if (coupon ) {
       appliedCoupon = coupon
       price = Math.round(price * (1 - coupon.discount / 100) * 100) / 100
     }
   }
 
+  const id = Date.now()
   const subscription = {
-    id: Date.now(),
-    userId,
+    id,
+    userId: id,
     cardCpf,
     method: 'credit_card',
     installments,
@@ -93,7 +85,6 @@ server.post('/subscription', (req, res) => {
   return res.status(201).json(subscription)
 })
 
-// GET /subscriptions/:userId — Este endpoint retorna a assinatura criada pelo usuário
 server.get('/subscriptions/:userId', (req, res) => {
   const db = router.db
   const userId = Number(req.params.userId)
@@ -103,7 +94,6 @@ server.get('/subscriptions/:userId', (req, res) => {
   return res.json(latest)
 })
 
-// Fallback para recursos padrão (plans, coupons, subscriptions)
 server.use(router)
 
 const PORT = process.env.PORT || 3000

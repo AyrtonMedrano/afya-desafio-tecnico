@@ -33,13 +33,13 @@ const CardProduct: React.FC<CardProductProps> = ({
   }).format(price);
 
   return (
-    <CardWrapper isSelected={isSelected} onClick={onSelect}>
+    <CardWrapper isSelected={isSelected}>
       {bestOffer && <BestOfferBadge>Melhor oferta</BestOfferBadge>}
       <RadioInput
         type="radio"
         name="product-plan"
         checked={isSelected}
-        readOnly
+        onChange={onSelect}
         onClick={(e) => e.stopPropagation()}
       />
       <Title>{title}</Title>

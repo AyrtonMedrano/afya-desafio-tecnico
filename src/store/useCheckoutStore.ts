@@ -50,14 +50,12 @@ export const useCheckoutStore = create<CheckoutState>((set, get) => ({
   updatePayment: (patch) =>
     set((state) => ({ payment: { ...state.payment, ...patch } })),
 
-  // cupom
   couponCode: null,
   couponPercent: 0,
   setCouponCode: (code) => set({ couponCode: code }),
   applyCoupon: (percent, code) => set({ couponPercent: percent, couponCode: code }),
   clearCoupon: () => set({ couponPercent: 0, couponCode: null }),
 
-  // Subtotal sem considerar desconto
   calculateSubtotal: () => {
     const { selectedPlan, prices } = get()
     return Math.round(
@@ -65,30 +63,33 @@ export const useCheckoutStore = create<CheckoutState>((set, get) => ({
     ) / 100
   },
 
-  // Desconto base (10% anual 1x) + adicional do cupom (percentual sobre preço anual)
   calculateDiscount: () => {
-    const { selectedPlan, prices, installments, couponPercent } = get()
-    let discount = 0
+    const { selectedPlan, prices, installments, couponPercent } = get();
+    const basePrice = selectedPlan === 'mensal' ? prices.mensal : prices.anual;
+    let price = basePrice;
+
     if (selectedPlan === 'anual' && installments === 1) {
-      discount += prices.anual * 0.1
-      if (couponPercent > 0) {
-        discount += prices.anual * (couponPercent / 100)
-      }
+      price = Math.round(price * 0.9 * 100) / 100;
     }
-    return Math.round(discount * 100) / 100
+    if (couponPercent > 0) {
+      price = Math.round(price * (1 - couponPercent / 100) * 100) / 100;
+    }
+
+    const discount = Math.round((basePrice - price) * 100) / 100;
+    return discount;
   },
 
-  // Total com regras existentes e cupom (apenas anual 1x recebe cupom adicional)
   calculateTotal: () => {
-    const { selectedPlan, prices, installments, couponPercent } = get()
-    if (selectedPlan === 'mensal') {
-      return Math.round(prices.mensal * 100) / 100
+    const { selectedPlan, prices, installments, couponPercent } = get();
+    let price = selectedPlan === 'mensal' ? prices.mensal : prices.anual;
+
+    if (selectedPlan === 'anual' && installments === 1) {
+      price = Math.round(price * 0.9 * 100) / 100;
     }
-    if (installments === 1) {
-      const basePercent = 0.1 + (couponPercent > 0 ? couponPercent / 100 : 0)
-      const total = prices.anual * (1 - basePercent)
-      return Math.round(total * 100) / 100
+    if (couponPercent > 0) {
+      price = Math.round(price * (1 - couponPercent / 100) * 100) / 100;
     }
-    return Math.round(prices.anual * 100) / 100
+
+    return Math.round(price * 100) / 100;
   },
 }))

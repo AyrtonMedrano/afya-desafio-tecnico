@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { Drawer } from './Drawer';
 import {
   Hint,
@@ -25,11 +25,7 @@ export function InstallmentsDrawer({
 }: InstallmentsDrawerProps) {
   const options = useMemo(() => Array.from({ length: 12 }, (_, i) => i + 1), []);
   const [selected, setSelected] = useState<number | null>(null);
-  const { prices, selectedPlan } = useCheckoutStore();
-
-  useEffect(() => {
-    setSelected(1);
-  }, [selectedPlan]);
+  const { prices } = useCheckoutStore();
 
   const formatBRL = (v: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);

@@ -1,79 +1,105 @@
-# React + TypeScript + Vite
+# Whitebook Checkout
 
-Estrutura de desenvolvimento do projeto:
+Fluxo completo de checkout para assinatura do Whitebook, com foco em arquitetura clara, confiabilidade e excelente UX.
 
-Iniciando com TDD, criando stores e testes para as mesmas.
+## Visão Geral
+- Front-end em React + TypeScript (Vite).
+- Estado global com Zustand.
+- Formulários com react-hook-form e validação com Zod.
+- API local via json-server customizado.
+- Testes unitários/integrados (Jest + Testing Library) e E2E (Playwright).
+- Estilos com CSS Modules e Styled Components no mesmo projeto, demonstrando proficiência em ambos.
 
-Seguindo com BDD, criando testes para as funcionalidades da UI com base em comportamento esperado.
+## Processo e Metodologia
+- TDD como norte: comecei pelos testes (cálculo de preços, regra de desconto no anual 1x, cupom, sincronização de parcelas), depois implementei a solução mínima para passar e refinei.
+- Segui as tecnologias sugeridas no escopo do teste, garantindo aderência e cobrindo o fluxo fim a fim.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Tecnologias Principais
+- Build/Dev: `Vite`, `TypeScript`, `React`
+- Estado: `Zustand`
+- Formulário e validação: `react-hook-form`, `zod`
+- Estilos: `CSS Modules`, `styled-components`
+- Testes: `Jest`, `@testing-library/react`, `Playwright`
+- API: `json-server` com endpoints customizados
+- Qualidade: `ESLint`, `Prettier`, `tsconfig` strict
 
-Currently, two official plugins are available:
+## Arquitetura
+- `pages/Checkout/CheckoutPage.tsx`: orquestra o fluxo, busca planos e cria assinatura.
+- `components/PaymentForm/PaymentForm.tsx`: captura, formata e valida dados do cartão (número, validade, CPF, bandeira).
+- `components/Summary/Summary.tsx`: exibe subtotal/descontos/total/parcelas e aplica/remove cupom.
+- `components/Drawer/InstallmentsDrawer.tsx`: seleção de parcelas com destaque para desconto anual à vista.
+- `store/useCheckoutStore.ts`: estado central (plano, preços, parcelas, cupom) e cálculos (`subtotal`, `discount`, `total`).
+- `services/api.ts`: integração com endpoints.
+- `server.cjs`: API local com regras de preço/cupom e persistência em `db.json`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Regras de Negócio
+- Anual 1x recebe 10% de desconto; cupom adicional aplica percentual sobre o preço anual.
+- Ao alterar o plano (mensal/anual), as parcelas resetam para 1x e são refletidas em formulário, resumo e drawer.
+- `SuccessPage` consulta a assinatura por `userId` e exibe dados contratados.
 
-## React Compiler
+## Estilo: CSS Modules + Styled Components
+- CSS Modules nos componentes e páginas onde o escopo estético é mais direto (PaymentForm, Summary).
+- Styled Components para o Drawer e subcomponentes, explorando composição e temas. A convivência mostra domínio prático das duas abordagens.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Execução
+Instalação:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Servidor da API:
+```bash
+node server.cjs
 ```
+
+Aplicação:
+```bash
+npm run dev
+```
+
+- `VITE_API_BASE_URL` (opcional) pode apontar para uma API diferente; sem definir, usa `http://localhost:3000`.
+
+## Testes
+Unit/integração:
+```bash
+npm test
+```
+
+E2E (CLI):
+```bash
+npm run e2e
+```
+
+E2E (UI Runner):
+```bash
+npm run e2e:ui
+```
+
+## Build e Preview
+Build:
+```bash
+npm run build
+```
+
+Preview:
+```bash
+npm run preview
+```
+
+## Deploy
+- Preparado para Vercel. Configure `VITE_API_BASE_URL` no ambiente para usar uma API válida.
+- A build usa `tsc -b && vite build` com `strict` e regras de não uso para segurança de produção.
+
+## Estrutura (resumo)
+- `src/components` — UI: PaymentForm, Summary, Drawer, etc.
+- `src/pages` — páginas: Checkout, Success
+- `src/store` — Zustand store e testes
+- `src/services` — chamadas de API
+- `src/types` — tipos TypeScript
+- `server.cjs` — servidor local (json-server custom)
+- `db.json` — dados (plans, coupons, subscriptions)
+
+## Decisões e Próximos Passos
+- `tsconfig` com `strict` e `noUnusedLocals/Parameters` para código limpo e previsível.
+- Utils de formatação isolados para testabilidade.
+- Evolução futura: API real para produção, observabilidade, melhorias de acessibilidade.
