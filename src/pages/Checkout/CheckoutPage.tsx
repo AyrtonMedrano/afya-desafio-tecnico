@@ -13,21 +13,17 @@ import { Alert } from '../../components/Alert/Alert';
 type PlanoTitle = 'mensal' | 'anual';
 
 export default function CheckoutPage() {
-  const { selectedPlan, selectPlan, setPrices, installments } =
-    useCheckoutStore();
+  const { selectedPlan, selectPlan, setPrices, installments } = useCheckoutStore();
   const [plans, setPlans] = useState<Plan[]>([]);
   const paymentFormRef = useRef<PaymentFormRef>(null);
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [subscriptionError, setSubscriptionError] = useState<string | null>(null);
-
-  const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
-  const isTestEnv =
-      (import.meta )?.env?.MODE === 'test' ||
-      process.env.NODE_ENV === 'test';
+  const [isLoadingPlans, setIsLoadingPlans] = useState(true);
 
   useEffect(() => {
     const fetchPlans = async () => {
+      setIsLoadingPlans(true);
       try {
         const plansData = await api.getPlans();
         setPlans(plansData);
@@ -38,6 +34,8 @@ export default function CheckoutPage() {
         }
       } catch (error) {
         console.error('Erro ao buscar planos:', error);
+      } finally {
+        setIsLoadingPlans(false);
       }
     };
 
@@ -86,19 +84,15 @@ export default function CheckoutPage() {
       holder: values.nameOnCard,
       number: values.cardNumber,
       installments: values.installments || installments,
-      couponCode: couponCode ?? null, 
+      couponCode: couponCode ?? null,
       userId: 1,
     };
 
     try {
       setSubscriptionError(null);
       setIsSubmitting(true);
-      if (!isTestEnv) {
-        await sleep(3000); 
-      }
-      
-      const userId = req.userId;
-      navigate(`/success/${userId}`);
+      await api.postSubscription(req);
+      navigate(`/success/${req.userId}`);
     } catch (err) {
       console.error('Falha ao criar assinatura:', err);
       const message =
@@ -174,11 +168,11 @@ export default function CheckoutPage() {
         </div>
       </main>
 
-      {isSubmitting && (
+      {isSubmitting || isLoadingPlans ? (
         <div className={styles['checkout__loading-overlay']} role="status" aria-live="polite" aria-label="Carregando">
           <div className={styles['checkout__spinner']} />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

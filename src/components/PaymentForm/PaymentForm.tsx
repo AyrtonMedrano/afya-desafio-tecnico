@@ -135,9 +135,11 @@ export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function
     useEffect(() => {
         if(selectedPlan==='mensal'){
             setShowInstallments(false);
+            setValue('installments', '1', { shouldValidate: true, shouldDirty: true });
         }
         if(selectedPlan==='anual'){
             setShowInstallments(true);
+            setValue('installments', '1', { shouldValidate: true, shouldDirty: true });
         }
     }, [selectedPlan, setValue]);
 
@@ -147,12 +149,10 @@ export const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(function
     return (
         <section className={styles['payment-form']}>
             <form className={styles['payment-form__box']} onSubmit={handleSubmit(submitHandler)} noValidate>
-                {/* registro sempre presente para installments */}
                 <input type="hidden" {...register('installments')} />
                 <div className={styles['payment-form__brands']}>
                     <span className={styles['payment-form__brands-label']}>Bandeiras aceitas</span>
                     <div className={styles['payment-form__brands-icons']}>
-                        {/* Espaços para ícones de bandeiras */}
                         <span
                             className={`${styles['payment-form__brand-placeholder']} ${brand === 'mastercard' ? styles['payment-form__brand-placeholder--active'] : ''}`}
                             aria-label="Mastercard"

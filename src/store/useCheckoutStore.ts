@@ -43,10 +43,7 @@ export const useCheckoutStore = create<CheckoutState>((set, get) => ({
   },
 
   selectPlan: (plan) =>
-    set((state: CheckoutState) => ({
-      selectedPlan: plan,
-      installments: plan === 'mensal' ? 1 : state.installments,
-    })),
+    set({ selectedPlan: plan, installments: 1 }),
 
   setInstallments: (n) => set({ installments: n }),
   setPrices: (prices) => set({ prices }),

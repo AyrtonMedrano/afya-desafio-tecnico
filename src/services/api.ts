@@ -1,6 +1,6 @@
 import type { Plan, Coupon, SubscriptionRequest, Subscription } from '../types/checkout'
-//LEMBRAR - Separar base url em arquivo .env
-const API_BASE_URL = 'http://localhost:3000'
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000'
 
 export async function getPlans(): Promise<Plan[]> {
   const res = await fetch(`${API_BASE_URL}/plans`)
