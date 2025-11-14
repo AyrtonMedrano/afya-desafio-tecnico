@@ -1,24 +1,25 @@
 # Whitebook Checkout
 
-Desafio técnico para a vaga de Desenvolvedor Frontend - Ayrton Medrano
+- Desafio técnico para a vaga de Desenvolvedor Frontend - Ayrton Medrano
 
-Caro examinador, busquei ao máximo utilizar as tecnologias citadas no escopo do teste, neste código você irá encontrar testes unitários, de integração e e2e.
+- Caro examinador, busquei ao máximo utilizar as tecnologias citadas no escopo do teste, neste código você irá encontrar testes unitários, de integração e e2e.
 
-Utilizei styled components em componentes modulares e CSS modules nas páginas de layout, busquei utilizar os dois para melhores fins de avaliação.
+- Utilizei styled components em componentes modulares e CSS modules nas páginas de layout, busquei utilizar os dois para melhores fins de avaliação.
 
-Espero que gostem, custou uma semana de noites mal dormidas rs.
+- Espero que gostem, custou uma semana de noites mal dormidas rs.
 
 No mais, qualquer dúvida fico a disposição via celular ou e-mail.
 
-Ayton Medrano
-+55 (11)96694-9707
-mrayrtonmedrano@gmail.com
-
+#
+#### Ayton Medrano
+##### +55 (11)96694-9707
+##### mrayrtonmedrano@gmail.com
+#
 ## Deploy
 
-Frontend - https://afya-ayrton-medrano.vercel.app/
-Backend - https://afya-desafio-tecnico.onrender.com
-Monitoramento do backend (Robô) - https://dashboard.uptimerobot.com/monitors
+- Frontend - https://afya-ayrton-medrano.vercel.app/
+- Backend - https://afya-desafio-tecnico.onrender.com
+- Monitoramento do backend (Robô) - https://dashboard.uptimerobot.com/monitors
 
 ## Visão Geral
 - Front-end em React + TypeScript (Vite).
@@ -114,3 +115,4 @@ npm run preview
 - `src/types` — tipos TypeScript
 - `server.cjs` — servidor local (json-server custom)
 - `db.json` — dados (plans, coupons, subscriptions)
+
